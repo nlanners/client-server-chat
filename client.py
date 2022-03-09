@@ -3,12 +3,24 @@ import socket
 HOST = 'localhost'
 PORT = 4444
 
-message = ''
-
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.connect((HOST, PORT))
-    while message != '/q':
-        message = bytes(input('Enter message: '), 'utf-8')
-        s.sendall(message)
+    print('Press /q to quit...')
+    while True:
+        message = input('> ')
+        if message == '/q':
+            break
+        elif message == '':
+            while message == '':
+                print('Please enter a message.')
+                message = input('> ')
+
+        s.sendall(bytes(message, 'utf-8'))
         reply = s.recv(1024)
-        print(reply)
+        if not reply:
+            break
+        print(str(reply, 'utf-8'))
+
+
+def attach_header(msg):
+    pass

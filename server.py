@@ -10,8 +10,18 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     conn, addr = s.accept()
     with conn:
         print(f"Connected by {addr}")
+        print('Press /q to quit...')
         while True:
-            data = conn.recv(1024)
-            if not data:
+            message = conn.recv(1024)
+            if not message:
                 break
-            conn.sendall(data)
+            print(str(message, 'utf-8'))
+            reply = input('> ')
+            if reply == '':
+                while reply == '':
+                    print('Please enter a message.')
+                    reply = input('> ')
+
+            if reply == '/q':
+                break
+            conn.sendall(bytes(reply, 'utf-8'))
